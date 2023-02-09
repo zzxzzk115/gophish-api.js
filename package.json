@@ -1,0 +1,65 @@
+{
+  "name": "@zzxzzk115/gophish-api",
+  "version": "1.0.0",
+  "description": "A JavaScript library for calling Gophish APIs.",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./lib/esm/types/index.d.ts",
+        "default": "./lib/esm/index.mjs"
+      },
+      "require": {
+        "types": "./lib/cjs/types/index.d.ts",
+        "default": "./lib/cjs/index.js"
+      }
+    }
+  },
+  "types": "./lib/cjs/types/index.d.ts",
+  "main": "index.js",
+  "files": [
+    "lib/**/*"
+  ],
+  "scripts": {
+    "clean": "rm -rf ./lib",
+    "build": "npm run clean && npm run build:esm && npm run build:cjs",
+    "build:esm": "tsc -p ./configs/tsconfig.esm.json && mv lib/esm/index.js lib/esm/index.mjs",
+    "build:cjs": "tsc -p ./configs/tsconfig.cjs.json",
+    "test": "mocha",
+    "semantic-release": "semantic-release",
+    "prepack": "npm run build"
+  },
+  "release": {
+    "branches": [
+      "main"
+    ]
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zzxzzk115/gophish-api.js.git"
+  },
+  "keywords": [
+    "gophish",
+    "api",
+    "npm",
+    "javascript",
+    "typescript"
+  ],
+  "author": "Lazy_V(@zzxzzk115)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zzxzzk115/gophish-api.js/issues"
+  },
+  "homepage": "https://github.com/zzxzzk115/gophish-api.js#readme",
+  "devDependencies": {
+    "@types/mocha": "^9.1.1",
+    "mocha": "^10.0.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.7.4",
+    "semantic-release": "^19.0.3",
+    "@types/chai": "^4.3.3",
+    "chai": "^4.3.6"
+  }
+}
