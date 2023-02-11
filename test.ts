@@ -1,5 +1,5 @@
 import fetch from "node-fetch";
-import { GophishClient, CampaignAPI, TemplateAPI, GroupAPI, Gophish } from "./src/index";
+import { GophishClient, Gophish } from "./src/index";
 
 GophishClient.fetch_function = fetch;
 
