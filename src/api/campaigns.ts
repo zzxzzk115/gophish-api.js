@@ -1,6 +1,5 @@
 import { GophishClient } from "../client";
-import { Campaign, CampainSummaries, CampainSummary } from "../models";
-import { Nullable } from "../types";
+import { Campaign, CampainSummaries, CampainSummary, ResponseModel } from "../models";
 import { APIEndpoint } from "./api";
 
 export class CampaignAPI extends APIEndpoint {
@@ -14,18 +13,25 @@ export class CampaignAPI extends APIEndpoint {
   }
 
   /**
-   * Gets the details for one or more campaigns by ID
+   * Gets the detail for a campaign by ID
    * @param campaign_id 
    */
-  public async get(campaign_id: Nullable<number> = null) {
+  public async get(campaign_id: number): Promise<Campaign> {
     return await super.get(campaign_id);
+  }
+
+  /**
+   * Gets all the details for campaigns
+   */
+  public async getAll(): Promise<Array<Campaign>> {
+    return await super.get();
   }
 
   /**
    * Creates a new campaign
    * @param campaign 
    */
-  public async post(campaign: Campaign) {
+  public async post(campaign: Campaign): Promise<Campaign> {
     return await super.post(campaign);
   }
 
@@ -42,7 +48,7 @@ export class CampaignAPI extends APIEndpoint {
    * Deletes an existing campaign
    * @param campaign_id 
    */
-  public async delete(campaign_id: number) {
+  public async delete(campaign_id: number): Promise<ResponseModel> {
     return await super.delete(campaign_id);
   }
 
@@ -50,7 +56,7 @@ export class CampaignAPI extends APIEndpoint {
    * Complete an existing campaign (Stop processing events)
    * @param campaign_id 
    */
-  public async complete(campaign_id: number) {
+  public async complete(campaign_id: number): Promise<ResponseModel> {
     return await super.get(campaign_id, "complete");
   }
 
@@ -58,15 +64,18 @@ export class CampaignAPI extends APIEndpoint {
    * Returns the campaign summary
    * @param campaign_id 
    */
-  public async summary(campaign_id: Nullable<number> = null) {
+  public async summary(campaign_id: number) {
     let parse_function: any = CampainSummary.parse;
     let single_resource = false;
-
-    if (!campaign_id) {
-      parse_function = CampainSummaries.parse;
-      single_resource = true;
-    }
-
     return await super.get(campaign_id, "summary", parse_function, single_resource);
+  }
+
+  /**
+   * Returns the campaign summarys
+   */
+  public async summarys() {
+    let parse_function = CampainSummaries.parse;
+    let single_resource = true;
+    return await super.get(null, "summary", parse_function, single_resource);
   }
 }

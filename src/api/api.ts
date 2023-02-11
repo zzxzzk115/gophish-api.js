@@ -104,23 +104,31 @@ export class APIEndpoint {
       execute_options.body = JSON.stringify(body);
     }
     const response = await this.api.execute(execute_options);
+    try{
+      if (!response.ok) {
+        console.error(response.statusText);
+      }
+      let result = response.json().then((json: any) => {
+        if (!response.ok) {
+          let res = ResponseModel.parse(json);
+          throw new Error(res.toString());
+        }
 
-    if (!response.ok) {
-      throw new Error(response.statusText);
+        if (resource_id || single_resource) {
+          return resource_parse_function(json);
+        }
+  
+        return json.map((resource: any) => resource_parse_function(resource));
+      });
+      return result;
+    } catch (e) {
+      throw e; 
     }
-
-    return response.json().then((json: any) => {
-      let res = ResponseModel.parse(json);
-
-      if (!res.success) {
-        throw new Error(res.message);
-      }
-
-      if (resource_id || single_resource) {
-        return resource_parse_function(json);
-      }
-      console.log(json);
-      return json.map((resource: any) => resource_parse_function(resource));
-    });
   }
 }
+
+export * from "./campaigns";
+export * from "./groups";
+export * from "./pages";
+export * from "./templates";
+export * from "./smtp";

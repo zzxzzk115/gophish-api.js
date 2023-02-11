@@ -24,7 +24,6 @@ export class Campaign implements IIndexdedGophishModel {
 
   static parse(json: any): Campaign {
     const campaign = new Campaign();
-    console.log(json);
     for (const key in json) {
       (<any>campaign)[key] = json[key];
     }
@@ -37,12 +36,11 @@ export class Campaign implements IIndexdedGophishModel {
  */
 export class CampainSummaries implements IGophishModel {
   total: Nullable<number>
-  campaigns: Nullable<Array<CampainSummary>>
+  campaigns: Array<CampainSummary> = []
 
   static parse(json: any): CampainSummaries {
     const campaignSummaries = new CampainSummaries();
     campaignSummaries.total = json.total;
-    (<any>campaignSummaries).campaigns = [];
     json.campaigns.map((campaign: any) => {
       (<any>campaignSummaries).campaigns.push(CampainSummary.parse(campaign));
     });
@@ -98,8 +96,8 @@ export class CampaignResults implements IIndexdedGophishModel {
   id: Nullable<number>
   name: Nullable<string>
   status: Nullable<string>
-  results: Nullable<Array<CampaignResult>>
-  timeline: Nullable<Array<TimelineEntry>>
+  results: Array<CampaignResult> = []
+  timeline: Array<TimelineEntry> = []
 }
 
 export class CampaignResult implements IGophishModel {
@@ -142,7 +140,15 @@ export class Group implements IIndexdedGophishModel {
   id: Nullable<number>
   name: Nullable<string>
   modified_date: Nullable<string>
-  targets: Nullable<Array<User>>
+  targets: Array<User> = []
+
+  static parse(json: any): Group {
+    const group = new Group();
+    for (const key in json) {
+      (<any>group)[key] = json[key];
+    }
+    return group;
+  }
 }
 
 export class SMTP implements IIndexdedGophishModel {
@@ -156,6 +162,14 @@ export class SMTP implements IIndexdedGophishModel {
   ignore_cert_errors: boolean = false
   modified_date: Nullable<string>
   headers: Nullable<Map<string, string>>
+
+  static parse(json: any): SMTP {
+    const smtp = new SMTP();
+    for (const key in json) {
+      (<any>smtp)[key] = json[key];
+    }
+    return smtp;
+  }
 }
 
 export class Template implements IIndexdedGophishModel {
@@ -166,6 +180,14 @@ export class Template implements IIndexdedGophishModel {
   html: Nullable<string>
   modified_date: Nullable<string>
   attachments: Nullable<Array<Attachment>>
+
+  static parse(json: any): Template {
+    const template = new Template();
+    for (const key in json) {
+      (<any>template)[key] = json[key];
+    }
+    return template;
+  }
 }
 
 export class Page implements IIndexdedGophishModel {
@@ -176,6 +198,14 @@ export class Page implements IIndexdedGophishModel {
   capture_credentials: boolean = false
   capture_passwords: boolean = false
   redirect_url: Nullable<string>
+
+  static parse(json: any): Page {
+    const page = new Page();
+    for (const key in json) {
+      (<any>page)[key] = json[key];
+    }
+    return page;
+  }
 }
 
 export class Attachment implements IGophishModel {
@@ -195,5 +225,9 @@ export class ResponseModel implements IGophishModel {
       (<any>response)[key] = json[key];
     }
     return response;
+  }
+
+  toString(): string {
+    return `ResponseModel { message: ${this.message}, success: ${this.success}, data: ${this.data}}`;
   }
 }

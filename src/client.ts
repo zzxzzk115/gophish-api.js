@@ -1,4 +1,4 @@
-import { Nullable } from "./types";
+import { CampaignAPI, GroupAPI, PageAPI, SMTPAPI, TemplateAPI } from "./api/api";
 
 const DEFAULT_URL = "https://localhost:3333";
 
@@ -61,8 +61,12 @@ export class GophishClient {
 
       For Example:
 
-      In Node.js:
+      In Node.js (CommonJS):
       const fetch = require("node-fetch");
+      GophishClient.fetch_function = fetch;
+
+      (ES Module):
+      import fetch from "node-fetch";
       GophishClient.fetch_function = fetch;
       `);
     }
@@ -78,10 +82,19 @@ export class GophishClient {
 }
 
 export class Gophish {
-
   client: GophishClient
+  campaigns: CampaignAPI
+  groups: GroupAPI
+  pages: PageAPI
+  templates: TemplateAPI
+  smtp: SMTPAPI
 
   constructor({ api_key, host, ...kwargs }: any) {
     this.client = new GophishClient({ api_key: api_key, host: host, ...kwargs });
+    this.campaigns = new CampaignAPI(this.client);
+    this.groups = new GroupAPI(this.client);
+    this.pages = new PageAPI(this.client);
+    this.templates = new TemplateAPI(this.client);
+    this.smtp = new SMTPAPI(this.client);
   }
 }
