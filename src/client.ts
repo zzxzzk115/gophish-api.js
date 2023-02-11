@@ -46,7 +46,7 @@ export class GophishClient {
    * @param path The request URL path
    * @param kwargs Additional arguments
    */
-  async execute(method: string, path: Nullable<string>, ...kwargs: any[]) {
+  execute(method: string, path: Nullable<string>, ...kwargs: any[]) {
     let url = this.host + path;
 
     kwargs.push(this._client_kwargs);
@@ -61,7 +61,7 @@ export class GophishClient {
       GophishClient.fetch_function = fetch;
       `);
     }
-    return await GophishClient.fetch_function(url, {
+    return GophishClient.fetch_function(url, {
       method: method,
       headers: {
         "Authorization": `Bearer ${this.api_key}`

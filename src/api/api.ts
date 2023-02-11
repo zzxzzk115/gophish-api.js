@@ -101,10 +101,15 @@ export class APIEndpoint {
     }
 
     if (resource_id || single_resource) {
-      return resource_parse_function(response.json());
+      return response.json().then((json: any) => {
+        return resource_parse_function(json);
+      });
     }
 
-    return response.json().map((resource: any) => resource_parse_function(resource));
+    return response.json().then((json: any) => {
+      return json.map((resource: any) => resource_parse_function(resource));
+    });
+
   }
 
 }

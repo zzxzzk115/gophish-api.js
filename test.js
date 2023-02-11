@@ -15,7 +15,7 @@ async function test() {
   const campaignAPI = new CampaignAPI(gophishClient);
   const firstCampaign = await campaignAPI.get(1);
   if (!firstCampaign || firstCampaign.id !== 1) {
-    console.log("Campain API test failed!");
+    console.log("Campaign API test failed!");
     process.exit(-1);
   }
 
