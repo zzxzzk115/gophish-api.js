@@ -1,30 +1,31 @@
 import { Nullable } from "./types";
 
-export interface IGophishModel {}
+export interface IGophishModel { }
 
 export interface IIndexdedGophishModel extends IGophishModel {
   id: Nullable<number>
 }
 
 export class Campaign implements IIndexdedGophishModel {
-  id: Nullable<number>
-  name: Nullable<string>
+  id: Nullable<number> = null
+  name: Nullable<string> = null
   created_date: Nullable<string> = new Date().toISOString()
   launch_date: Nullable<string> = new Date().toISOString()
-  send_by_date: Nullable<string>
-  completed_date: Nullable<string>
-  template: Nullable<Template>
-  page: Nullable<Page>
-  status: Nullable<string>
-  results: Nullable<Array<CampaignResult>>
-  groups: Nullable<Array<Group>>
-  timeline: Nullable<Array<TimelineEntry>>
-  smtp: Nullable<SMTP>
-  url: Nullable<string>
+  send_by_date: Nullable<string> = null
+  completed_date: Nullable<string> = null
+  template: Nullable<Template> = null
+  page: Nullable<Page> = null
+  status: Nullable<string> = null
+  results: Array<CampaignResult> = []
+  groups: Array<Group> = []
+  timeline: Array<TimelineEntry> = []
+  smtp: Nullable<SMTP> = null
+  url: Nullable<string> = null
 
   static parse(json: any): Campaign {
     const campaign = new Campaign();
-    for (const key in json){
+    console.log(json);
+    for (const key in json) {
       (<any>campaign)[key] = json[key];
     }
     return campaign;
@@ -36,7 +37,17 @@ export class Campaign implements IIndexdedGophishModel {
  */
 export class CampainSummaries implements IGophishModel {
   total: Nullable<number>
-  campaigns: Nullable<Array<Campaign>>
+  campaigns: Nullable<Array<CampainSummary>>
+
+  static parse(json: any): CampainSummaries {
+    const campaignSummaries = new CampainSummaries();
+    campaignSummaries.total = json.total;
+    (<any>campaignSummaries).campaigns = [];
+    json.campaigns.map((campaign: any) => {
+      (<any>campaignSummaries).campaigns.push(CampainSummary.parse(campaign));
+    });
+    return campaignSummaries;
+  }
 }
 
 export class CampainSummary implements IIndexdedGophishModel {
@@ -47,7 +58,19 @@ export class CampainSummary implements IIndexdedGophishModel {
   launch_date: Nullable<string>
   send_by_date: Nullable<string>
   completed_date: Nullable<string>
-  stats: Nullable<Array<Stat>>
+  stats: Nullable<Stat>
+
+  static parse(json: any): CampainSummary {
+    const campaignSummary = new CampainSummary();
+    for (const key in json) {
+      if (key === "stats") {
+        (<any>campaignSummary)[key] = Stat.parse(json[key]);
+        continue;
+      }
+      (<any>campaignSummary)[key] = json[key];
+    }
+    return campaignSummary;
+  }
 }
 
 export class Stat implements IGophishModel {
@@ -58,6 +81,14 @@ export class Stat implements IGophishModel {
   submitted_data: Nullable<number>
   email_reported: Nullable<number>
   error: Nullable<number>
+
+  static parse(json: any): Stat {
+    const stat = new Stat();
+    for (const key in json) {
+      (<any>stat)[key] = json[key];
+    }
+    return stat;
+  }
 }
 
 /**
@@ -154,7 +185,15 @@ export class Attachment implements IGophishModel {
 }
 
 export class ResponseModel implements IGophishModel {
-  message: Nullable<string>
-  success: Nullable<string>
+  message: string | undefined
+  success: boolean = false
   data: any
+
+  static parse(json: any): ResponseModel {
+    const response = new ResponseModel();
+    for (const key in json) {
+      (<any>response)[key] = json[key];
+    }
+    return response;
+  }
 }

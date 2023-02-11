@@ -1,5 +1,5 @@
 import { GophishClient } from "../client";
-import { IIndexdedGophishModel } from "../models";
+import { IIndexdedGophishModel, ResponseModel } from "../models";
 import { Nullable } from "../types";
 
 export class APIEndpoint {
@@ -95,21 +95,32 @@ export class APIEndpoint {
       endpoint = this._build_url(endpoint, resource_action);
     }
 
-    const response = await this.api.execute(method, endpoint, { json: body });
-    if (!response.ok) {
-      throw new Error(response.json().toString());
-    }
+    let execute_options: any = {
+      method: method,
+      path: endpoint
+    };
 
-    if (resource_id || single_resource) {
-      return response.json().then((json: any) => {
-        return resource_parse_function(json);
-      });
+    if (method === "POST" || method === "PUT") {
+      execute_options.body = JSON.stringify(body);
+    }
+    const response = await this.api.execute(execute_options);
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
     }
 
     return response.json().then((json: any) => {
+      let res = ResponseModel.parse(json);
+
+      if (!res.success) {
+        throw new Error(res.message);
+      }
+
+      if (resource_id || single_resource) {
+        return resource_parse_function(json);
+      }
+      console.log(json);
       return json.map((resource: any) => resource_parse_function(resource));
     });
-
   }
-
 }
