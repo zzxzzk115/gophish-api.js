@@ -104,8 +104,7 @@ export class APIEndpoint {
       return resource_parse_function(response.json());
     }
 
-    // return response.json().map(resource => resource_parse_function(resource));
-    return response.json();
+    return response.json().map((resource: any) => resource_parse_function(resource));
   }
 
 }

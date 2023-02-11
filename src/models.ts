@@ -23,7 +23,10 @@ export class Campaign implements IIndexdedGophishModel {
   url: Nullable<string>
 
   static parse(json: any): Campaign {
-    let campaign = json as Campaign;
+    const campaign = new Campaign();
+    for (const key in json){
+      (<any>campaign)[key] = json[key];
+    }
     return campaign;
   }
 }

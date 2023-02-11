@@ -10,9 +10,17 @@ const HOST = process.env["GOPHISH_HOST"];
 
 async function test() {
   const gophishClient = new GophishClient(API_KEY, HOST);
+
+  /* Campaign API Test */
   const campaignAPI = new CampaignAPI(gophishClient);
   const firstCampaign = await campaignAPI.get(1);
-  console.log(firstCampaign);
+  if (!firstCampaign || firstCampaign.id !== 1) {
+    console.log("Campain API test failed!");
+    process.exit(-1);
+  }
+
+  console.log("Passed all tests.");
+  process.exit(0);
 }
 
 test();
