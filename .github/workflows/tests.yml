@@ -17,6 +17,7 @@ jobs:
     env:
       GOPHISH_API_KEY: ${{ secrets.GOPHISH_API_KEY }}
       GOPHISH_HOST: ${{ secrets.GOPHISH_HOST }}
+      RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
 
     steps:
       - uses: actions/checkout@v3

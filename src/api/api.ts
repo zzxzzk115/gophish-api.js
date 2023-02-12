@@ -42,7 +42,7 @@ export class APIEndpoint {
   async post(
     resource: IIndexdedGophishModel
   ) {
-    return await this._request("POST", resource);
+    return await this._request("POST", resource, null, null, null, true);
   }
 
   /**
@@ -117,7 +117,7 @@ export class APIEndpoint {
         if (resource_id || single_resource) {
           return resource_parse_function(json);
         }
-  
+        
         return json.map((resource: any) => resource_parse_function(resource));
       });
       return result;

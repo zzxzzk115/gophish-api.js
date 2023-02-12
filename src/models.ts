@@ -23,11 +23,7 @@ export class Campaign implements IIndexdedGophishModel {
   url: Nullable<string> = null
 
   static parse(json: any): Campaign {
-    const campaign = new Campaign();
-    for (const key in json) {
-      (<any>campaign)[key] = json[key];
-    }
-    return campaign;
+    return json as Campaign;
   }
 }
 
@@ -39,12 +35,7 @@ export class CampainSummaries implements IGophishModel {
   campaigns: Array<CampainSummary> = []
 
   static parse(json: any): CampainSummaries {
-    const campaignSummaries = new CampainSummaries();
-    campaignSummaries.total = json.total;
-    json.campaigns.map((campaign: any) => {
-      (<any>campaignSummaries).campaigns.push(CampainSummary.parse(campaign));
-    });
-    return campaignSummaries;
+    return json as CampainSummaries;
   }
 }
 
@@ -59,15 +50,7 @@ export class CampainSummary implements IIndexdedGophishModel {
   stats: Nullable<Stat>
 
   static parse(json: any): CampainSummary {
-    const campaignSummary = new CampainSummary();
-    for (const key in json) {
-      if (key === "stats") {
-        (<any>campaignSummary)[key] = Stat.parse(json[key]);
-        continue;
-      }
-      (<any>campaignSummary)[key] = json[key];
-    }
-    return campaignSummary;
+    return json as CampainSummary;
   }
 }
 
@@ -81,11 +64,7 @@ export class Stat implements IGophishModel {
   error: Nullable<number>
 
   static parse(json: any): Stat {
-    const stat = new Stat();
-    for (const key in json) {
-      (<any>stat)[key] = json[key];
-    }
-    return stat;
+    return json as Stat;
   }
 }
 
@@ -143,12 +122,13 @@ export class Group implements IIndexdedGophishModel {
   targets: Array<User> = []
 
   static parse(json: any): Group {
-    const group = new Group();
-    for (const key in json) {
-      (<any>group)[key] = json[key];
-    }
-    return group;
+    return json as Group;
   }
+}
+
+export class Header {
+  key: Nullable<string>
+  value: Nullable<string>
 }
 
 export class SMTP implements IIndexdedGophishModel {
@@ -161,14 +141,10 @@ export class SMTP implements IIndexdedGophishModel {
   from_address: Nullable<string>
   ignore_cert_errors: boolean = false
   modified_date: Nullable<string>
-  headers: Nullable<Map<string, string>>
+  headers: Array<Header> = []
 
   static parse(json: any): SMTP {
-    const smtp = new SMTP();
-    for (const key in json) {
-      (<any>smtp)[key] = json[key];
-    }
-    return smtp;
+    return json as SMTP;
   }
 }
 
@@ -179,14 +155,10 @@ export class Template implements IIndexdedGophishModel {
   text: Nullable<string>
   html: Nullable<string>
   modified_date: Nullable<string>
-  attachments: Nullable<Array<Attachment>>
+  attachments: Array<Attachment> = []
 
   static parse(json: any): Template {
-    const template = new Template();
-    for (const key in json) {
-      (<any>template)[key] = json[key];
-    }
-    return template;
+    return json as Template;
   }
 }
 
@@ -200,11 +172,7 @@ export class Page implements IIndexdedGophishModel {
   redirect_url: Nullable<string>
 
   static parse(json: any): Page {
-    const page = new Page();
-    for (const key in json) {
-      (<any>page)[key] = json[key];
-    }
-    return page;
+    return json as Page;
   }
 }
 
@@ -220,11 +188,7 @@ export class ResponseModel implements IGophishModel {
   data: any
 
   static parse(json: any): ResponseModel {
-    const response = new ResponseModel();
-    for (const key in json) {
-      (<any>response)[key] = json[key];
-    }
-    return response;
+    return json as ResponseModel;
   }
 
   toString(): string {

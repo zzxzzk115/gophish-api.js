@@ -7,8 +7,6 @@ const DEFAULT_URL = "https://localhost:3333";
  */
 export class GophishClient {
 
-  public static fetch_function: any;
-
   /**
    * Gophish API_KEY
    */
@@ -24,11 +22,16 @@ export class GophishClient {
   host: string
 
   /**
+   * Fetch handler
+   */
+  fetch_handler: (url: string, options: any) => Promise<any>
+
+  /**
    * Additional arguments
    */
   _client_kwargs: object | null = null
 
-  constructor({ api_key, host = DEFAULT_URL, ...kwargs }: any) {
+  constructor({ api_key, host = DEFAULT_URL, fetch_handler, ...kwargs }: any) {
     this.api_key = api_key;
 
     if (host.endsWith('/')) {
@@ -36,6 +39,8 @@ export class GophishClient {
     } else {
       this.host = host + '/';
     }
+
+    this.fetch_handler = fetch_handler;
 
     if (kwargs.length) {
       this._client_kwargs = kwargs;
@@ -55,29 +60,29 @@ export class GophishClient {
       kwargs.push(this._client_kwargs);
     }
 
-    if (!GophishClient.fetch_function) {
+    if (!this.fetch_handler) {
       throw new Error(`
-      Please set GophishClient.fetch_function as a specific fetch function, such as node-fetch.
+      Please set up fetch handler, such as node-fetch.
 
       For Example:
 
       In Node.js (CommonJS):
       const fetch = require("node-fetch");
-      GophishClient.fetch_function = fetch;
+      const gophish = new Gophish({api_key: "YOUR API KEY", host: "YOUR HOST", fetch_handler: fetch})
 
       (ES Module):
       import fetch from "node-fetch";
-      GophishClient.fetch_function = fetch;
+      const gophish = new Gophish({api_key: "YOUR API KEY", host: "YOUR HOST", fetch_handler: fetch})
       `);
     }
-    let option: any = {
+    let options: any = {
       method: method,
       headers: {
         "Authorization": `Bearer ${this.api_key}`
       },
       ...kwargs
     };
-    return GophishClient.fetch_function(url, option);
+    return this.fetch_handler(url, options);
   }
 }
 
@@ -89,8 +94,8 @@ export class Gophish {
   templates: TemplateAPI
   smtp: SMTPAPI
 
-  constructor({ api_key, host, ...kwargs }: any) {
-    this.client = new GophishClient({ api_key: api_key, host: host, ...kwargs });
+  constructor({ api_key, host, fetch_handler, ...kwargs }: any) {
+    this.client = new GophishClient({ api_key: api_key, host: host, fetch_handler: fetch_handler, ...kwargs });
     this.campaigns = new CampaignAPI(this.client);
     this.groups = new GroupAPI(this.client);
     this.pages = new PageAPI(this.client);
