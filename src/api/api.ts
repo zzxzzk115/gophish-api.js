@@ -101,8 +101,9 @@ export class APIEndpoint {
     };
 
     if (method === "POST" || method === "PUT") {
-      execute_options.body = JSON.stringify(body);
+      execute_options.body = body;
     }
+    
     const response = await this.api.execute(execute_options);
     try{
       if (!response.ok) {

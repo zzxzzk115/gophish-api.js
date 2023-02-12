@@ -21,6 +21,7 @@
         <img src="https://img.shields.io/npm/v/@zzxzzk115/gophish-api?logo=npm">
     </a>
 </p>
+
 ## Motivation
 
 Gophish provides its RESTful APIs and a [python API library](https://github.com/gophish/api-client-python).
@@ -77,14 +78,17 @@ A TypeScript (ts-node) example:
 import fetch from "node-fetch";
 import { Campaign, Gophish, Group, Page, SMTP, Template, User } from "@zzxzzk115/gophish-api";
 
-// Get the API_KEY and HOST from System Environment Variables.
+// Get the API_KEY,HOST and RECIPIENT_EMAIL from System Environment Variables.
 const API_KEY = process.env["GOPHISH_API_KEY"];
 const HOST = process.env["GOPHISH_HOST"];
 const RECIPIENT_EMAIL = process.env["RECIPIENT_EMAIL"];
 
+// Do NOT forget to set up the fetch handler!!!
+Gophish.fetch_handler = fetch;
+
 async function test() {
   try {
-    const gophish = new Gophish({ api_key: API_KEY, host: HOST, fetch_handler: fetch });
+    const gophish = new Gophish({ api_key: API_KEY, host: HOST });
     const now = Date.now();
 
     // Step 1: Create a new Template
