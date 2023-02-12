@@ -1,23 +1,77 @@
-# gophish-api.js
-A JavaScript library for calling Gophish APIs.
+# Gophish-API.js
 
-# Install
+<div align="center">
+    <img src="./docs/media/logo.svg" />
+</div>
+<h4 align="center">
+  A JavaScript/TypeScript library for calling Gophish APIs.
+</h4>
 
-Install by npm:
+
+<p align="center">
+    <a href="https://github.com/zzxzzk115/gophish-api.js/actions" alt="CI">
+        <img src="https://img.shields.io/github/actions/workflow/status/zzxzzk115/gophish-api.js/publish.yml?branch=master&label=CI&logo=github" /></a>
+    <a href="https://github.com/zzxzzk115/gophish-api.js/issues" alt="GitHub Issues">
+        <img src="https://img.shields.io/github/issues/zzxzzk115/gophish-api.js">
+    </a>
+    <a href="https://github.com/zzxzzk115/gophish-api.js/blob/master/LICENSE" alt="GitHub">
+        <img src="https://img.shields.io/github/license/zzxzzk115/gophish-api.js">
+    </a>
+    <a href="https://www.npmjs.com/package/@zzxzzk115/gophish-api" alt="npm (scoped)">
+        <img src="https://img.shields.io/npm/v/@zzxzzk115/gophish-api?logo=npm">
+    </a>
+</p>
+## Motivation
+
+Gophish provides its RESTful APIs and a [python API library](https://github.com/gophish/api-client-python).
+
+But as a programmer, I'm not fond of writing bunch of web request function callings.
+
+Therefore, **Gophish-API.js** borns.
+
+## Features
+
+- Supports importing as an ES6 module.
+- Supports importing as a CommonJS module.
+- async - await.
+- Written by TypeScript.
+- Easy to use.
+
+## Installation
+
+### Gophish-API.js
+
+Gophish-API.js is available as an [npm package](https://www.npmjs.com/package/@zzxzzk115/gophish-api).
+
+**npm:**
 
 ```bash
 npm i @zzxzzk115/gophish-api
 ```
 
-Install by yarn
+**yarn:**
 
 ```bash
 yarn add @zzxzzk115/gophish-api
 ```
 
-# Sample Usage
+## Loading and configuring the module
 
-TypeScript:
+### ES Modules (ESM)
+
+```javascript
+import { Gophish } from "@zzxzzk115/gophish-api";
+```
+
+### CommonJS (CJS)
+
+```javascript
+const { Gophish } = require("@zzxzzk115/gophish-api");
+```
+
+## Getting started with Gophish-API.js
+
+A TypeScript (ts-node) example:
 
 ```typescript
 import fetch from "node-fetch";
@@ -96,6 +150,6 @@ async function test() {
 test();
 ```
 
-# License
+## License
 
 MIT
