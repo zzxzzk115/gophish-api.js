@@ -105,21 +105,18 @@ export class APIEndpoint {
     }
     
     const response = await this.api.execute(execute_options);
-    const handled_response = Gophish.response_promise_handler(response);
+    const json = Gophish.response_handler(response);
     try{
-      let result = handled_response.then((json: any) => {
-        if (response.ok !== undefined && !response.ok) {
-          let res = ResponseModel.parse(json);
-          throw new Error(res.toString());
-        }
+      if (response.ok !== undefined && !response.ok) {
+        let res = ResponseModel.parse(json);
+        throw new Error(res.toString());
+      }
 
-        if (resource_id || single_resource) {
-          return resource_parse_function(json);
-        }
-        
-        return json.map((resource: any) => resource_parse_function(resource));
-      });
-      return result;
+      if (resource_id || single_resource) {
+        return resource_parse_function(json);
+      }
+      
+      return json.map((resource: any) => resource_parse_function(resource));
     } catch (e) {
       throw e; 
     }

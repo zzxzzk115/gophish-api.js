@@ -102,7 +102,7 @@ export class Gophish {
   /**
    * Fetch handler
    */
-  static fetch_handler: (url: string, options: any) => Promise<any>
+  static fetch_handler: (url: string, options: any) => any
 
   /**
    * Body packer
@@ -110,17 +110,22 @@ export class Gophish {
   static body_packer: (body: any) => any = JSON.stringify;
 
   /**
-   * Response promise handler
+   * Response handler
+   * @param response fetch response
+   * @returns json
    */
-  static response_promise_handler: (response: any) => Promise<any> = (response: any) => {
+  static response_handler: (response: any) => any = (response: any) => {
     if (response.ok !== undefined && response.statusText !== undefined && !response.ok) {
       console.error(response.statusText);
     }
-    if (response.json !== undefined) {
-      return response.json();
-    } else {
-      return response;
+    
+    if (response.json !== undefined) { // normal fetch and node-fetch
+      return response.json().then((data: any) => data);
+    } else if (response.data !== undefined) { // tauri fetch
+      return response.data;
     }
+
+    return response;
   }
 
   constructor({ api_key, host, ...kwargs }: any) {
