@@ -15,7 +15,7 @@
     }
   },
   "types": "./lib/cjs/types/index.d.ts",
-  "main": "index.js",
+  "main": "./lib/cjs/index.js",
   "files": [
     "lib/**/*"
   ],
@@ -25,7 +25,6 @@
     "build": "npm run clean && npm run build:esm && npm run build:cjs",
     "build:esm": "tsc -p ./configs/tsconfig.esm.json && mv lib/esm/index.js lib/esm/index.mjs",
     "build:cjs": "tsc -p ./configs/tsconfig.cjs.json",
-    "semantic-release": "semantic-release",
     "prepack": "npm run build"
   },
   "release": {

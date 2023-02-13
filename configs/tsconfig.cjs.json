@@ -7,7 +7,7 @@
     ],
     "target": "ES6",
     "module": "CommonJS",
-    "moduleResolution": "Node",
+    "moduleResolution": "node",
     "outDir": "../lib/cjs",
     "declarationDir": "../lib/cjs/types"
   }

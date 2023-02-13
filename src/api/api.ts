@@ -1,4 +1,4 @@
-import { GophishClient } from "../client";
+import { Gophish, GophishClient } from "../client";
 import { IIndexdedGophishModel, ResponseModel } from "../models";
 import { Nullable } from "../types";
 
@@ -105,12 +105,10 @@ export class APIEndpoint {
     }
     
     const response = await this.api.execute(execute_options);
+    const handled_response = Gophish.response_promise_handler(response);
     try{
-      if (!response.ok) {
-        console.error(response.statusText);
-      }
-      let result = response.json().then((json: any) => {
-        if (!response.ok) {
+      let result = handled_response.then((json: any) => {
+        if (response.ok !== undefined && !response.ok) {
           let res = ResponseModel.parse(json);
           throw new Error(res.toString());
         }

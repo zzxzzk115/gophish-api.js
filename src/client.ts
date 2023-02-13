@@ -74,10 +74,6 @@ export class GophishClient {
       `);
     }
 
-    if (!Gophish.body_packer) {
-      Gophish.body_packer = JSON.stringify;
-    }
-
     var bodyOption;
     if (body) {
       bodyOption = Gophish.body_packer(body);
@@ -111,7 +107,21 @@ export class Gophish {
   /**
    * Body packer
    */
-  static body_packer: (body: any) => any
+  static body_packer: (body: any) => any = JSON.stringify;
+
+  /**
+   * Response promise handler
+   */
+  static response_promise_handler: (response: any) => Promise<any> = (response: any) => {
+    if (response.ok !== undefined && response.statusText !== undefined && !response.ok) {
+      console.error(response.statusText);
+    }
+    if (response.json !== undefined) {
+      return response.json();
+    } else {
+      return response;
+    }
+  }
 
   constructor({ api_key, host, ...kwargs }: any) {
     this.client = new GophishClient({ api_key: api_key, host: host, ...kwargs });
