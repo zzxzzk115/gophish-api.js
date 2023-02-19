@@ -190,8 +190,4 @@ export class ResponseModel implements IGophishModel {
   static parse(json: any): ResponseModel {
     return json as ResponseModel;
   }
-
-  toString(): string {
-    return `ResponseModel { message: ${this.message}, success: ${this.success}, data: ${this.data}}`;
-  }
 }

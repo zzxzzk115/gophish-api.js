@@ -103,23 +103,19 @@ export class APIEndpoint {
     if (method === "POST" || method === "PUT") {
       execute_options.body = body;
     }
-    
-    const response = await this.api.execute(execute_options);
-    const json = Gophish.response_handler(response);
-    try{
-      if (response.ok !== undefined && !response.ok) {
-        let res = ResponseModel.parse(json);
-        throw new Error(res.toString());
-      }
 
-      if (resource_id || single_resource) {
-        return resource_parse_function(json);
-      }
-      
-      return json.map((resource: any) => resource_parse_function(resource));
-    } catch (e) {
-      throw e; 
+    const response = await this.api.execute(execute_options);
+    const json = await Gophish.response_handler(response);
+    if (response.ok !== undefined && !response.ok) {
+      let res = ResponseModel.parse(json);
+      throw res;
     }
+
+    if (resource_id || single_resource) {
+      return resource_parse_function(json);
+    }
+
+    return json.map((resource: any) => resource_parse_function(resource));
   }
 }
 

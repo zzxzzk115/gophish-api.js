@@ -114,13 +114,13 @@ export class Gophish {
    * @param response fetch response
    * @returns json
    */
-  static response_handler: (response: any) => any = (response: any) => {
+  static response_handler: (response: any) => any = async (response: any) => {
     if (response.ok !== undefined && response.statusText !== undefined && !response.ok) {
       console.error(response.statusText);
     }
     
     if (response.json !== undefined) { // normal fetch and node-fetch
-      return response.json().then((data: any) => data);
+      return await response.json();
     } else if (response.data !== undefined) { // tauri fetch
       return response.data;
     }
